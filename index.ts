@@ -1,4 +1,2 @@
 
-
-export { PurchasesClient } from './src/clients/PuchasesClient';
-export { IPurchasesClient } from './src/interfaces/purchases.interfaces';
+export * as V2 from './src/v2';

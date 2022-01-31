@@ -1,6 +1,6 @@
-export const ApplicationUsername = '1E6676C70C123AA18222EF001120CAE1';
-export const GetCustomerPurchasesResultData = {
-  applicationUsername: ApplicationUsername,
+export const applicationUsername = '1E6676C70C123AA18222EF001120CAE1';
+export const getCustomerPurchasesResultData = {
+  applicationUsername: applicationUsername,
   purchases: {
     "apple:monthly_subcscription": {
       productId: "apple:monthly_subcscription",
@@ -27,7 +27,7 @@ export const GetCustomerPurchasesResultData = {
   }
 };
 
-export const GetCustomersBulkInfoResult_data = {
+export const getCustomersBulkInfoResultData = {
   paging: {
     skip: 0,
     limit: 4,

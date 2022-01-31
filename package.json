@@ -1,7 +1,18 @@
 {
-  "name": "iaptic-client",
-  "version": "1.0.0",
-  "description": "",
+  "name": "iaptic",
+  "version": "0.0.1",
+  "description": "Client library for iaptic (formerly Fovea.Billing)",
+  "keywords": [
+    "iaptic",
+    "fovea",
+    "cordova",
+    "purchase",
+    "subscription",
+    "ios",
+    "android"
+  ],
+  "author": "Fovea <contact@fovea.cc>",
+  "license": "GPL-3.0-or-later",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -9,20 +20,13 @@
     "testw": "nodemon --ext ts --watch src/ --watch tests/ --watch config.ts --exec \"npm test\"",
     "lint": "eslint src/ tests/ --ext .ts",
     "trans": "tsc -b -v -i -w",
-    "build": "npx tsc",
-    "buildw": "npx tsc -w"
+    "build": "tsc",
+    "buildw": "tsc -w"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/j3k0/iaptic-client.git"
   },
-  "keywords": [
-    "billing",
-    "iaptic",
-    "client"
-  ],
-  "author": "Hussein Taha",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/j3k0/iaptic-client/issues"
   },
@@ -41,17 +45,15 @@
     "eslint": "^8.7.0",
     "mocha": "^9.1.4",
     "testdouble": "^3.16.4",
-    "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
   "dependencies": {
     "async": "^3.2.3",
     "bunyan": "^1.8.15",
-    "lodash": "^4.17.21",
+    "got": "^11.8.3",
     "ms": "^2.1.3",
-    "restify-clients": "^3.1.0",
     "snyk": "^1.834.0",
-    "url": "^0.11.0"
+    "ts-node": "^10.4.0"
   },
   "snyk": true
 }

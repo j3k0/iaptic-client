@@ -2,39 +2,42 @@ import { ParsedUrlQueryInput } from 'querystring';
 import { ApiCustomerPurchases, ApiCustomerSummary, Paginated } from '.';
 
 export type ClientOptions = {
-  protocol: string,
-  hostname: string,
-  port: number,
-  pathnamePrefix?: string,
-  clientId?: string,
-  secret?: string,
-  agent?: string
+  appName: string,
+  secretKey: string,
+  url?: URL | string
 }
 
 export type ExtendedHeaderOptions = { body: any, qs: any }
 
-
-export type DefaultBaseClientOptions = {
-  // Enable retries in establishing TCP connection
-  // (this will not retry on HTTP errors).
-  retry: { minTimeout: any; maxTimeout: any; retries: number; };
-  headers: { accept: string; 'accept-encoding': string; };
+export type BaseClientExtendedOptions = {
+  pathPrefix: string;
+  headers?: Record<string, string>;
 }
 
 export type ApiRequestParams = {
   method: string,
   path: string,
-  headers: object | Record<string, unknown> | null,
-  body: object | string | number | null,
+  headers: object | Record<string, string> | null,
+  body: Record<string, unknown> | null,
   qs: ParsedUrlQueryInput | null
 }
 
-export type ApiRequestCallback = (err: Error | null, result?: any) => void;
-export type GetCustomerPurchasesCallback = (err: Error | null, data?: ApiCustomerPurchases) => void;
-export type GetCustomersBulkInfoCallback = (err: Error | null, data?: Paginated<ApiCustomerSummary>) => void;
+export type ApiRequestCallback = (err: Error | ErrorResponseBody | null, result?: any) => void;
+export type GetCustomerPurchasesCallback = (err: Error | ErrorResponseBody | null, data?: ApiCustomerPurchases) => void;
+export type GetCustomersBulkInfoCallback = (err: Error | ErrorResponseBody | null, data?: Paginated<ApiCustomerSummary>) => void;
 
-export type GetCustomersBulkInfoParams = {
-  skip?: number;
-  limit?: number;
-  applicationUsername?: string[];
+export type ApplicationUserNameArray = {
+  applicationUsername: string[];
+}
+export type PagingParam = {
+  skip: number;
+  limit: number;
+};
+export type GetCustomersBulkInfoParams = PagingParam | ApplicationUserNameArray;
+
+export type ErrorResponseBody = {
+  status: number;
+  ok: boolean;
+  code: string;
+  message: string;
 }
