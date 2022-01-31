@@ -1,9 +1,18 @@
-import { IPurchasesClient } from "../interfaces/purchases.interfaces";
-import { ApiCustomerPurchases, ApiCustomerSummary, ClientOptions, GetCustomerPurchasesCallback, GetCustomersBulkInfoCallback, GetCustomersBulkInfoParams, Paginated } from "../types";
-import { BaseClient } from "./BaseClient.abstract";
+import { config } from "../../../config";
+
+import {
+  ApiCustomerPurchases,
+  ApiCustomerSummary, ApplicationUserNameArray, ClientOptions,
+  GetCustomerPurchasesCallback,
+  GetCustomersBulkInfoCallback, GetCustomersBulkInfoParams,
+  Paginated, PagingParam
+} from "../../types";
+import { BaseClient } from "../../common/BaseClient.abstract";
+import { ICustomersClient } from "../interfaces/CustomersClient.interfaces";
+import { base64 } from "../../utils/helper";
 
 /**
- * class PurchasesClient
+ * class CustomersClient
  * constructor requires options as
  * {
  *  protocol: 'http',
@@ -15,28 +24,35 @@ import { BaseClient } from "./BaseClient.abstract";
  *  agent?: string
  * }
  */
-export class PurchasesClient extends BaseClient implements IPurchasesClient {
+export class CustomersClient extends BaseClient implements ICustomersClient {
 
   /**
    * constructor
+   *
    * @param options ClientOptions
    */
   constructor(options: ClientOptions) {
-    super(`${options.protocol}://${options.hostname}:${options.port}${options.pathnamePrefix}`, options);
-
+    super(options.url ? options.url.toString() : config.url, {
+      pathPrefix: config.V2.pathPrefix,
+      headers: { Authorization: `Basic ${base64(options.appName + ':' + options.secretKey)}` }
+    });
   }
 
   /**
    * Get customer purchases
-   * @param applicationUsername : string application-username
-   * @param cb : callback method for getting the data.
-   * @returns : void
+   *
+   * @param applicationUsername - string application-username
+   * @param cb - callback method for getting the data.
+   * @returns - void
    */
   getCustomerPurchases(applicationUsername: string, cb: GetCustomerPurchasesCallback): void {
 
     if (applicationUsername === null || applicationUsername === '' || applicationUsername === undefined) {
       return cb(new Error("UserId parameter is required to be non-null and non-empty"));
     }
+
+    if (typeof applicationUsername !== 'string')
+      return cb(new Error("applicationUsername parameter should be a string"));
 
     this.apiCall({
       method: 'get', path: `/${applicationUsername}/purchases`,
@@ -54,18 +70,31 @@ export class PurchasesClient extends BaseClient implements IPurchasesClient {
 
   /**
    * Get bulk information about your customers.
-   * @param params : GetCustomersBulkInfoParams => limit, skip, applicationUsername
-   * @param cb : callback method for getting the data.
-   * @returns : void
+   *
+   * @param params - GetCustomersBulkInfoParams => limit, skip, applicationUsername
+   * @param cb - callback method for getting the data.
+   * @returns - void
    */
   getCustomersBulkInfo(params: GetCustomersBulkInfoParams, cb: GetCustomersBulkInfoCallback): void {
-    params.skip = params.skip || 0;
-    const qs = params.applicationUsername && params.applicationUsername.length > 0 ?
-      Object.assign({
-        applicationUsername: params.applicationUsername.map((name, i) => encodeURIComponent(name)).join(',')
-      }) :
-      (params.limit !== 0 && params.limit !== undefined ? { limit: params.limit, skip: params.skip } : null);
 
+    const isApplicationUsersExist = (variableToCheck: any): variableToCheck is ApplicationUserNameArray =>
+      (variableToCheck as ApplicationUserNameArray).applicationUsername !== undefined;
+
+    const isPagingParam = (variableToCheck: any): variableToCheck is PagingParam =>
+      (variableToCheck as PagingParam).limit !== undefined;
+
+    const buildBulkQuerystring = (params: GetCustomersBulkInfoParams) => {
+      if (isApplicationUsersExist(params) && params.applicationUsername?.length > 0) {
+        return {
+          applicationUsername: params.applicationUsername?.map((name, i) => encodeURIComponent(name)).join(',')
+        };
+      } else if (isPagingParam(params) && params.limit > 0) {
+        params.skip = params.skip || 0;
+        return params;
+      }
+      return null;
+    }
+    const qs = buildBulkQuerystring(params);
     if (qs === null) {
       return cb(new Error("skip and limit are disregarded when 'applicationUsername' parameter" +
         " is specified, else skip and limit should be defined."));

@@ -1,12 +1,11 @@
-import { JsonClient } from "restify-clients";
-import { ApiCustomerPurchases, ApiCustomerSummary, DefaultBaseClientOptions, GetCustomerPurchasesCallback, GetCustomersBulkInfoCallback, GetCustomersBulkInfoParams, Paginated } from "../types";
 
+import {
+  GetCustomerPurchasesCallback, GetCustomersBulkInfoCallback,
+  GetCustomersBulkInfoParams
+} from "../../types";
 
-export interface IPurchasesClient {
-  api: JsonClient;
-  baseUrl: string;
-  pathPrefix: string | undefined;
-  apiOptions: DefaultBaseClientOptions;
+export interface ICustomersClient {
   getCustomerPurchases(applicationUsername: string, cb: GetCustomerPurchasesCallback): void;
   getCustomersBulkInfo(params: GetCustomersBulkInfoParams, cb: GetCustomersBulkInfoCallback): void;
 }
+
