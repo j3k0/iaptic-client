@@ -1,6 +1,6 @@
 {
   "name": "iaptic",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Client library for iaptic (formerly Fovea.Billing)",
   "keywords": [
     "iaptic",
