@@ -73,7 +73,6 @@ export class CustomersClient extends BaseClient implements ICustomersClient {
    *
    * @param params - GetCustomersBulkInfoParams => limit, skip, applicationUsername
    * @param cb - callback method for getting the data.
-   * @returns - void
    */
   getCustomersBulkInfo(params: GetCustomersBulkInfoParams, cb: GetCustomersBulkInfoCallback): void {
 
