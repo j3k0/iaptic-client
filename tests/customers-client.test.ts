@@ -25,7 +25,7 @@ describe('PurchasesClient', () => {
     it('sets the default URL to https://validator.fovea.cc', () => {
 
       const client = createClient();
-      expect(client.BaseUrl).to.be.eql('https://validator.fovea.cc');
+      expect(client.baseUrl).to.be.eql('https://validator.fovea.cc');
     });
   });
 
