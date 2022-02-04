@@ -41,3 +41,8 @@ export type ErrorResponseBody = {
   code: string;
   message: string;
 }
+
+export type WebHookPost = ApiCustomerPurchases & {
+  type: string;
+  password: string
+};
